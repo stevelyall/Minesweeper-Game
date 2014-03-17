@@ -1,5 +1,5 @@
 /* Minesweeper.java
- *git?
+ *
  *
  * Steven Lyall 
  *
@@ -7,8 +7,9 @@
  * - instructions when app starts?
  * - ease of use?
  * - static huh? clean up method params? possible to move arrays being passed to class scope?
- * - OOP-ness? move to other classes?
+ * - OOP? move to other classes?
  * - make board displayed bigger? easier to see?
+ * - lower difficulty?
  * - combine row/column input into one line?
  * -package into executable? browser?
  * 
@@ -26,8 +27,9 @@ public class Minesweeper {
 	static int cellsUncovered = 0;
 	static int numBombs = 0;
 
-	
+// distributes T and F bomb locations in bomb matrix
 	static void setBombPositions(boolean[][] matrix) {
+	
 		Random rand = new Random();
 		for (int i=1;i<=M;i++) {
 			for (int j=1;j<=N;j++) {
@@ -39,6 +41,7 @@ public class Minesweeper {
 			}
 		}
 	}
+// counts bombs in adjacent cells and set up matrix to hold them
 	static void countAdjacent(boolean[][] a, int[][] b) {
 		for (int i=1;i<=M;i++) {
 			for (int j=1;j<=N; j++) {
@@ -55,7 +58,7 @@ public class Minesweeper {
 			}
 		}
 	}
-// make unused edge cells form border
+// make unused edge cells into border
 	static void setBoardBorder(String[][]a) {
 		for (int i =0;i<M+2;i++) {
 			for (int j=0;j<N+2; j++) {
@@ -94,7 +97,7 @@ public class Minesweeper {
 			}
 		}
 	}
-	
+// show the num of bombs adjacent for ij cell
 	static void displayCount(int[][] matrix) {
 		for (int i =0;i<matrix.length;i++) {
 			for (int j=0;j<matrix[0].length; j++) {
@@ -103,6 +106,7 @@ public class Minesweeper {
 			System.out.println();
 		}
 	}
+// prints matrix that user sees
 	static void displayBoard(String[][] matrix) {
 		for (int i =0;i<matrix.length;i++) {
 			for (int j=0;j<matrix[0].length; j++) {
@@ -118,35 +122,36 @@ public class Minesweeper {
 		System.out.println("Enter 0 to mark a cell.");
 		System.out.println("Enter row to try:");
 		int i = kb.nextInt(); 
-		if (i==0) {		// if enter zero, call mark, player marks board and starts turn again
+			if (i==0) { // if a zero is entered, go to mark
 			mark(board);
-			attempt(b, uncovered, board);
 		}
 		System.out.println("Enter column to try:"); //// TODO can i and j values be merged into one input?
 		int j = kb.nextInt();
-		if (j==0) {
-			mark(board);
-			attempt(b, uncovered, board);
-		}
-		System.out.println("Trying " + i + ", " + j); // check if bomb in boolean matrix at ij
-		if (uncovered[i][j] == true) { // already attempted
-			System.out.println("You have already tried that space");
-		}
-		if (!uncovered[i][j]) {
-			if (b[i][j]) { // bomb there, game over
-				uncovered[i][j] = true;
-				gameOver=true;
-				
-			}
-			else {
-				uncovered[i][j] = true; // no bomb, reveal cell, count
-				cellsUncovered++;
-				System.out.println("Still no bombs...");
-			}
-		}
-		if (i==0) { //not sure why i put this here? is already above?
+			if (j==0) { // if a zero is entered, go to mark
 			mark(board);
 		}
+		if ((i!= M+1) && (j != N+1)) {
+			System.out.println("Trying " + i + ", " + j); // check if bomb in boolean matrix at ij
+			if (uncovered[i][j] == true) { // already attempted
+				System.out.println("You have already tried that space");
+			}
+			if (!uncovered[i][j]) {
+				if (b[i][j]) { // bomb there, game over
+					uncovered[i][j] = true;
+					gameOver=true;
+
+				}
+				else {
+					uncovered[i][j] = true; // no bomb, reveal cell, count
+					cellsUncovered++;
+					System.out.println("Still no bombs...");
+				}
+			}
+		}
+		else {
+		System.out.println("Invalid input. Please enter a column and row that is on the board.");
+		}
+		
 		// recursive possible?
 		//if (!gameOver) { 
 			//attempt(b, uncovered, board);
@@ -175,7 +180,6 @@ public class Minesweeper {
 		System.out.println("Enter column to mark:");
 		int j = kb.nextInt();
 		board[i][j] = "! ";
-		
 	}
 	// finds out if player has uncovered all cells without bombs
 	static boolean checkGameWon(boolean[][] b, boolean [][]uncovered) {
@@ -183,10 +187,9 @@ public class Minesweeper {
 			if (cellsUncovered==cellsToCheck) {
 					return true;
 				}
-			//}
-		//}
-					else			
-		return false;
+			else {			
+				return false;
+			}
 	}
 	public static void main (String[] args) {
 	//take input from keyboard
@@ -199,40 +202,40 @@ public class Minesweeper {
 		N = 4;
 				//kb.nextInt();
 		//System.out.println("Value for p:");
-		p = 0.66; //lower means more bombs
+		p = 0.80; //lower means more bombs
 				//kb.nextDouble();
 
-		
+
 		boolean[][] b = new boolean[M+2][N+2]; // contains bomb positions
 		boolean[][] uncovered = new boolean[M+2][N+2]; // has player checked the cell
 		setBombPositions(b); 
 
 		int bCount[][] = new int[M+2][N+2]; 	// array for counting adjacent bombs
 		countAdjacent(b, bCount);
-		
+
 		// printbMatrix(b);
 		//displayCount(bCount); // prints count matrix for testing
-		
+
 		String [][] board = new String [M+2][N+2];
 		setBoardBorder(board);
 		setBoardState(b, board, uncovered, bCount);
-	
-		
+
+
 		do {
 		 //displayBoard(board); not needed, first line of attempt method?
 		 // printbMatrix(b); // print answers to cheat while testing
 			attempt(b, uncovered, board);
 			setBoardState(b, board, uncovered, bCount);
-	
+
 		}
 		while (!gameOver && !checkGameWon(b, uncovered));
-		
+
 		if (checkGameWon(b, uncovered)) {
 			setBoardState(b, board,uncovered, bCount);
 			displayBoard(board);
 			System.out.println("YOU WIN!");
 		}
-		
+
 		if (gameOver) {
 			gameOver(b, board, uncovered, bCount);
 		}
