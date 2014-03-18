@@ -17,6 +17,19 @@
 
 import java.util.*;
 
+class MatrixPrinter {
+
+	// prints bomb locations for testing, hidden from user
+	static void printbMatrix(boolean[][] matrix) {
+		for (int i =0;i<matrix.length;i++) {
+			for (int j=0;j<matrix[0].length; j++) {
+				System.out.print(matrix[i][j] + " ");
+			}
+			System.out.println();
+		}
+	}
+	
+}
 public class Minesweeper {
 	static int M, N;
 	static double p;
@@ -29,7 +42,7 @@ public class Minesweeper {
 
 // distributes T and F bomb locations in bomb matrix
 	static void setBombPositions(boolean[][] matrix) {
-	
+
 		Random rand = new Random();
 		for (int i=1;i<=M;i++) {
 			for (int j=1;j<=N;j++) {
@@ -151,20 +164,11 @@ public class Minesweeper {
 		else {
 		System.out.println("Invalid input. Please enter a column and row that is on the board.");
 		}
-		
+
 		// recursive possible?
 		//if (!gameOver) { 
 			//attempt(b, uncovered, board);
 	}	
-	// prints bomb locations for testing, hidden from user
-	static void printbMatrix(boolean[][] matrix) {
-		for (int i =0;i<matrix.length;i++) {
-			for (int j=0;j<matrix[0].length; j++) {
-				System.out.print(matrix[i][j] + " ");
-			}
-			System.out.println();
-		}
-	}
 	// run when ij contains bomb, breaks loop in main and shows result
 	// TODO show bomb locations that haven't been located?
 	static void gameOver(boolean [][] b, String[][] board, boolean[][] uncovered, int[][] bCount) {
@@ -202,7 +206,7 @@ public class Minesweeper {
 		N = 4;
 				//kb.nextInt();
 		//System.out.println("Value for p:");
-		p = 0.80; //lower means more bombs
+		p = 0.70; //lower means more bombs
 				//kb.nextDouble();
 
 
@@ -213,7 +217,7 @@ public class Minesweeper {
 		int bCount[][] = new int[M+2][N+2]; 	// array for counting adjacent bombs
 		countAdjacent(b, bCount);
 
-		// printbMatrix(b);
+		MatrixPrinter.printbMatrix(b);
 		//displayCount(bCount); // prints count matrix for testing
 
 		String [][] board = new String [M+2][N+2];
