@@ -1,7 +1,7 @@
 /* Minesweeper.java
  *
  *
- * Steven Lyall 
+ * Steven Lyall
  *
  * To do:
  * - instructions when app starts?
@@ -28,7 +28,7 @@ public class Minesweeper {
 		// take i and j from user, zero to mark cells
 		System.out.println("Enter 0 to mark a cell.");
 		System.out.println("Enter row to check:");
-		i = kb.nextInt(); 
+		i = kb.nextInt();
 		if (i==0) { // if a zero is entered, go to mark
 			mark(board);
 		}
@@ -53,6 +53,7 @@ public class Minesweeper {
 					}
 					else {
 						board.setChecked(i, j); // no bomb, reveal cell, count
+						board.revealClearAdjacent(i,j);
 						cellsUncovered++;
 						System.out.println("No bombs yet...");
 					}
@@ -62,7 +63,7 @@ public class Minesweeper {
 				System.out.println("Invalid input. Please enter a column and row that is on the board.");
 			}
 		}
-	}	
+	}
 	// let user mark uncovered cells that could contain bomb
 	static void mark(Board board) {
 		System.out.println("Enter row to mark:");
@@ -98,11 +99,11 @@ public class Minesweeper {
 		if (cellsUncovered==cellsToCheck) {
 			return true;
 		}
-		else {			
+		else {
 			return false;
 		}
 	}
-	
+
 	public static void main (String[] args) {
 
 		// set size of game board

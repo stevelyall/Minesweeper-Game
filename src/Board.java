@@ -19,7 +19,7 @@ public class Board {
 		uncovered = new boolean[M+2][N+2]; // has player checked the cell
 		cellMarked = new boolean[M+2][N+2];
 		board = new String [M+2][N+2];
-		adjCount = new int[M+2][N+2]; 
+		adjCount = new int[M+2][N+2];
 		setBombPositions();
 		countAdjacent();
 		setBoardBorder();
@@ -49,9 +49,9 @@ public class Board {
 					for (int r=i-1;r<=i+1;r++) {
 						for (int c=j-1;c<=j+1;c++) {
 							if (r==i && c==j) {
-								continue; 
+								continue;
 							}
-							adjCount[r][c] += 1;	
+							adjCount[r][c] += 1;
 						}
 					}
 				}
@@ -59,6 +59,15 @@ public class Board {
 		}
 	}
 
+	void revealClearAdjacent(int i, int j) {
+		for (int row =i-1;row<=i+1;i++) {
+			for (int column=j-1;column<=j+1;j++) {
+				if (!bombPositions[row][column]) {
+					board.setChecked(row,column);
+					}
+			}
+		}
+	}
 	int getCellsToCheck() {
 		return (M*N) - numBombs;
 
@@ -93,7 +102,7 @@ public class Board {
 				}
 			}
 		}
-	}	
+	}
 
 	// these two methods print hidden matrices for testing
 	void showBombLocations() {
@@ -152,7 +161,7 @@ public class Board {
 						board[i][j] = Integer.toString(adjCount[i][j]) + " ";
 				}
 				else {
-					board[i][j] = "# ";	
+					board[i][j] = "# ";
 					if (cellMarked[i][j]) {
 						board[i][j] = "! ";
 					}
