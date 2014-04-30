@@ -60,14 +60,15 @@ public class Board {
 	}
 
 	void revealClearAdjacent(int i, int j) {
-		for (int row =i-1;row<=i+1;i++) {
-			for (int column=j-1;column<=j+1;j++) {
+		for (int row=i-1;row<=i+1;row++) {
+			for (int column=j-1;column<=j+1;column++) {
 				if (!bombPositions[row][column]) {
-					board.setChecked(row,column);
-					}
+						uncovered[row][column] = true;
+				}
 			}
 		}
 	}
+
 	int getCellsToCheck() {
 		return (M*N) - numBombs;
 

@@ -4,12 +4,15 @@
  * Steven Lyall
  *
  * To do:
+ * - new game won method? check whole board for none uncovered that don't contain bombs?
  * - instructions when app starts?
  * - ease of use?
  * - make board displayed bigger? easier to see?
  * - difficulty?
  * - combine row/column input into one line?
  * - package into executable? browser?
+ * - change statics to pass reference
+ * -clear adjacent cells
  */
 
 import java.util.Scanner;
@@ -18,8 +21,8 @@ public class Minesweeper {
 	static Scanner kb = new Scanner(System.in);
 	static boolean gameOver = false;
 	static boolean gameWon = false;
-	static int cellsToCheck = 0;
-	static int cellsUncovered = 0;
+	//static int cellsToCheck = 0;
+	//static int cellsUncovered = 0;
 
 	// runs each turn player takes
 	static void attempt(Board board) {
@@ -54,7 +57,6 @@ public class Minesweeper {
 					else {
 						board.setChecked(i, j); // no bomb, reveal cell, count
 						board.revealClearAdjacent(i,j);
-						cellsUncovered++;
 						System.out.println("No bombs yet...");
 					}
 				}
@@ -95,15 +97,36 @@ public class Minesweeper {
 	// finds out if player has uncovered all cells without bombs
 
 	static boolean GameWon(Board board) {
-		cellsToCheck = board.getCellsToCheck();
-		if (cellsUncovered==cellsToCheck) {
+		int cells = 0;
+		int cellsToCheck = board.getCellsToCheck();
+		// this is bad
+		for (int i = 0; i<board.board.length;i++) {
+			for (int j=0; j<board.board[0].length; j++) {
+				if (board.uncovered[i][j]) {
+					cellsToCheck--;
+				}
+			}
+		}
+		
+		if (cellsToCheck == 0) {
 			return true;
 		}
 		else {
 			return false;
 		}
+		
+		
+		/* 
+		 * if (cellsUncovered==board.getCellsToCheck()) {
+		
+			return true;
+		}
+		else {
+			return false;
+		}  
+		*/
 	}
-
+	
 	public static void main (String[] args) {
 
 		// set size of game board
